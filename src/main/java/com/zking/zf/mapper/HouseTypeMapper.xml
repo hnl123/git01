@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zking.zf.mapper.HouseTypeMapper" >
+  <cache type="com.zking.zf.redis.RedisCache" />
+  <resultMap id="BaseResultMap" type="com.zking.zf.model.HouseType" >
+    <constructor >
+      <idArg column="type_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="type_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+
+  <resultMap id="kfc" type="com.zking.zf.model.HouseType" >
+      <id column="type_id" property="typeId" javaType="java.lang.Integer"/>
+      <result column="type_name" property="typeName" javaType="java.lang.String" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    type_id, type_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+    select 
+    <include refid="Base_Column_List" />
+    from t_house_type
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </select>
+
+  <select id="list" resultMap="kfc" parameterType="HouseType" useCache="true">
+    select * from t_house_type order by type_id
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_house_type
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zking.zf.model.HouseType" useGeneratedKeys="true" keyProperty="typeId">
+    insert into t_house_type (type_id, type_name)
+    values (#{typeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zking.zf.model.HouseType" >
+    insert into t_house_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zking.zf.model.HouseType" >
+    update t_house_type
+    <set >
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zking.zf.model.HouseType" >
+    update t_house_type
+    set type_name = #{typeName,jdbcType=VARCHAR}
+    where type_id = #{typeId,jdbcType=INTEGER}
+  </update>
+</mapper>
